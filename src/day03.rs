@@ -1,8 +1,9 @@
 use itertools::Itertools;
 
+use std::collections::HashMap;
+
 pub fn a(inp: String) {
     let mut sum = 0usize;
-
     for line in inp.trim().lines().map(str::as_bytes) {
         let (first_half, second_half) = line.split_at(line.len() / 2);
         let c = common(&[first_half, second_half]).unwrap();
@@ -24,38 +25,14 @@ pub fn b(inp: String) {
 }
 
 pub fn common(inputs: &[&[u8]]) -> Option<u8> {
-    let mut indexes = [0].repeat(inputs.len());
-
-    loop {
-        let value = inputs[0][indexes[0]];
-        let mut all = true;
-        for i in 1..inputs.len() {
-            if inputs[i][indexes[i]] != value {
-                all = false;
-                break;
-            }
-        }
-
-        if all {
-            return Some(value);
-        }
-
-        // Increment the next index
-        // [0 0] [0 1] [0 2] [1 0] [1 1] [1 2] [2 0] [2 1] [2 2] None
-        let mut index = inputs.len() - 1;
-        loop {
-            indexes[index] += 1;
-            if indexes[index] < inputs[index].len() {
-                break;
-            }
-
-            indexes[index] = 0;
-            if index == 0 {
-                return None;
-            }
-            index -= 1;
+    let mut counts = HashMap::<u8, usize>::new();
+    for input in inputs {
+        for value in input.iter().unique() {
+            counts.entry(*value).and_modify(|i| *i += 1).or_insert(1);
         }
     }
+
+    counts.iter().find(|(_, v)| **v >= inputs.len()).map(|(k, _)| k).copied()
 }
 
 fn prio(val: u8) -> usize {
