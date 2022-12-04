@@ -1,10 +1,12 @@
 pub fn a(inp: String) {
-    let overlaps: usize = inp.trim().lines().map(parse_range).map(|(r1, r2)| total_overlaps(r1, r2)).sum();
+    let overlaps: usize =
+        inp.trim().lines().map(parse_range).map(|(r1, r2)| -> usize { total_overlaps(r1, r2).into() }).sum();
     println!("{}", overlaps);
 }
 
 pub fn b(inp: String) {
-    let overlaps: usize = inp.trim().lines().map(parse_range).map(|(r1, r2)| partial_overlaps(r1, r2)).sum();
+    let overlaps: usize =
+        inp.trim().lines().map(parse_range).map(|(r1, r2)| -> usize { partial_overlaps(r1, r2).into() }).sum();
     println!("{}", overlaps);
 }
 
@@ -15,22 +17,13 @@ fn parse_range(inp: &str) -> ((usize, usize), (usize, usize)) {
     ((s1_begin.parse().unwrap(), s1_end.parse().unwrap()), (s2_begin.parse().unwrap(), s2_end.parse().unwrap()))
 }
 
-fn total_overlaps(r1: (usize, usize), r2: (usize, usize)) -> usize {
-    if (r1.0 <= r2.0 && r1.1 >= r2.1) || (r2.0 <= r1.0 && r2.1 >= r1.1) {
-        1
-    } else {
-        0
-    }
+fn total_overlaps(r1: (usize, usize), r2: (usize, usize)) -> bool {
+    (r1.0 <= r2.0 && r1.1 >= r2.1) || (r2.0 <= r1.0 && r2.1 >= r1.1)
 }
 
-fn partial_overlaps(r1: (usize, usize), r2: (usize, usize)) -> usize {
-    if (r1.0 <= r2.0 && r1.1 >= r2.0)
+fn partial_overlaps(r1: (usize, usize), r2: (usize, usize)) -> bool {
+    (r1.0 <= r2.0 && r1.1 >= r2.0)
         || (r1.0 <= r2.1 && r1.1 >= r2.1)
         || (r2.0 <= r1.0 && r2.1 >= r1.0)
         || (r2.0 <= r1.1 && r2.1 >= r1.1)
-    {
-        1
-    } else {
-        0
-    }
 }
