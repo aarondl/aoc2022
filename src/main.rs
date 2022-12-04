@@ -5,7 +5,7 @@ use std::io::Write;
 mod day01;
 mod day02;
 mod day03;
-// mod day04;
+mod day04;
 // mod day05;
 // mod day06;
 // mod day07;
@@ -31,8 +31,8 @@ const SOLUTIONS: &'static [fn(String)] = &[
     day02::b,
     day03::a,
     day03::b,
-    // day04::a,
-    // day04::b,
+    day04::a,
+    day04::b,
     // day05::a,
     // day05::b,
     // day06::a,
